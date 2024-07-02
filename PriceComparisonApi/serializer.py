@@ -25,3 +25,8 @@ class SearchProductSerializer(serializers.Serializer):
 
 
     search_string = serializers.CharField()
+
+
+class ReadShopSerializer(serializers.Serializer):
+
+    query_str = serializers.CharField()

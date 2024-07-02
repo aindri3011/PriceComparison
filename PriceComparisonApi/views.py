@@ -6,8 +6,8 @@ import datetime
 import pytz
 
 # IMPORTING SERVICE MODULES AND SERIALIZERS
-from .serializer import CreateShopSerializer, CreateProductSerializer, ReadProductSerializer, SearchProductSerializer
-from.Service.Details import CreateShop, CreateProduct, ReadProduct
+from .serializer import CreateShopSerializer, CreateProductSerializer, ReadProductSerializer, SearchProductSerializer, ReadShopSerializer
+from.Service.Details import CreateShop, CreateProduct, ReadProduct, ReadShop
 from.Service.SearchProduct import Search
 
 ist = pytz.timezone('Asia/Kolkata')
@@ -20,6 +20,19 @@ class Create_Shop_Api(APIView):
         serializer = CreateShopSerializer(data=request.data)
         if serializer.is_valid():
             ob1 = CreateShop(serializer)
+            return_data = ob1.start_process()
+            if return_data['status'] == status.HTTP_200_OK:
+                return Response(return_data['data'], return_data['status'])
+            else:
+                return Response(return_data['data'], status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+
+        data = request.GET
+        serializer = ReadShopSerializer(data=data)
+        if serializer.is_valid():
+            ob1 = ReadShop(serializer)
             return_data = ob1.start_process()
             if return_data['status'] == status.HTTP_200_OK:
                 return Response(return_data['data'], return_data['status'])

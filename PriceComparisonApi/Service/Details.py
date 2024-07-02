@@ -103,8 +103,7 @@ class ReadProduct:
         self.serializer = serializer.data
 
         self.product_collection = product_collection
-        ist = pytz.timezone('Asia/Kolkata')
-        self.now = datetime.datetime.now(ist)
+
         self.read_parameters()
 
     def read_parameters(self):
@@ -133,7 +132,7 @@ class ReadProduct:
 
     def read_all_document(self):
 
-        list = []
+
 
         for document in self.product_collection.find({}, {'_id': False}):
            if document['shop_name'] not in self.return_data:
@@ -141,9 +140,6 @@ class ReadProduct:
            else:
                self.return_data[document['shop_name']] += [{"name": document['product'], "price": document["price"]}]
 
-           list.append(document['product_id'])
-
-        self.return_data.update({"id_list": list})
 
 
     def read_by_id(self):  # Except Date
@@ -186,6 +182,50 @@ class ReadProduct:
             except Exception as e:
                 error_str = "Class : ReadingSingledata\n Thread : Thread1" + e
                 return {"data": error_str, "status": status.HTTP_400_BAD_REQUEST}
+
+        return {"data": {"status": "success", "return_data": self.return_data}, "status": status.HTTP_200_OK}
+
+
+class ReadShop:
+
+    def __init__(self, serializer):
+
+        self.data = serializer.data
+        self.serializer = serializer.data
+
+        self.store_collection = store_collection
+
+        self.read_parameters()
+
+    def read_parameters(self):
+
+        self.query_id = self.data['query_str']
+
+        try:
+            self.shop_name = self.data['shop_name']
+        except:
+            self.shop_name = None
+
+        self.return_data = {}  # Return data
+
+    def read_all_document(self):
+
+        for document in self.store_collection.find({}, {'_id': False}):
+
+                self.return_data.update({document['shop_id']: document})
+
+    def start_process(self):
+        if self.query_id == "all":
+            # Thread 1
+            try:
+                t1 = threading.Thread(target=self.read_all_document)
+                t1.start()
+                t1.join()
+            except Exception as e:
+                error_str = "Class : ReadingALldata\n Thread : Thread1" + e
+                return {"data": error_str, "status": status.HTTP_400_BAD_REQUEST}
+
+
 
         return {"data": {"status": "success", "return_data": self.return_data}, "status": status.HTTP_200_OK}
 
