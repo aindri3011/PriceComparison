@@ -39,9 +39,21 @@ def add_product(request):
     }
     add_product_database = requests.post(global_api_prefix+"api/create-product/", data=fixed_data)
     response = add_product_database.json()
-    print("i am here", response)
+
     if response["status"] == "success":
+
         return JsonResponse({"status": 1, "return_data": response['return_data']})
     else:
         return JsonResponse({"status": 0})
 
+def search_product(request):
+    search_bar = request.POST.get("search_bar")
+
+    search_database = requests.get(global_api_prefix + "api/search-product/?search_string="+search_bar)
+    response = search_database.json()
+
+    if response["return_type"] == "success":
+
+        return JsonResponse({"status": 1, "return_data": response['return_data']})
+    else:
+        return JsonResponse({"status": 0})

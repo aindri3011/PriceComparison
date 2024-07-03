@@ -74,3 +74,66 @@
     })
 
     });
+
+
+   $(document).on("click",".search_btn",function () {
+
+              let search_bar = document.getElementById("search_bar").value
+
+     mydata = {
+         "search_bar":search_bar,
+
+     }
+
+
+    $.ajax({
+        url: `search-product`,
+        method: "POST",
+        headers: {'X-CSRFToken': document.getElementById('csrf').querySelector('input').value},
+        data : mydata,
+        success: (res)=>{
+
+           // console.log(res)
+            if(res.status == 1) {
+                $("#product_row").empty();
+                const productRow = document.getElementById('product_row');
+
+
+                Object.entries(res.return_data).forEach(([storeName, items]) => {
+        const storeHtml = `
+            <div class="card" style="width: 18rem; background: #fdadf0;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: #b00a95;">${storeName}</h5>
+                    <hr>
+                    <ul>
+                        ${items.map(item => `
+                            <li>
+                                <a href="#" class="btn btn-default" style="color: white; background: #86008b; margin: 2px;">
+                                    ${item.product} - Rs. ${item.price}
+                                </a>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+
+        productRow.insertAdjacentHTML('beforeend', storeHtml);
+    });
+}
+
+
+
+
+            else{
+                alert("Something Went Wrong...")
+            }
+        },
+        error: (error)=>{
+            console.log(error)
+            alert("Something went wrong...")
+        }
+    })
+
+    });
+

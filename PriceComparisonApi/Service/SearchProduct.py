@@ -27,7 +27,7 @@ class Search:
         query_list = [q1, q2]
         query = {"$or": query_list}
 
-        self.id_list = []
+
         for doc in self.product_collection.find(query, {"_id": False}):
             try:
                 if doc["shop_name"] not in self.return_data:
@@ -36,11 +36,11 @@ class Search:
                     self.return_data[doc["shop_name"]] += [doc]
 
 
-                self.id_list.append(doc["product_id"])
+
             except:
                 self.return_data.update("no data found")
 
-            self.return_data.update({"product_id_list": self.id_list})
+
 
 
     def start_process(self):
