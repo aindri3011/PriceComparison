@@ -57,3 +57,13 @@ def search_product(request):
         return JsonResponse({"status": 1, "return_data": response['return_data']})
     else:
         return JsonResponse({"status": 0})
+
+
+def specific_product_details(request):
+
+    product_id = request.GET.get("product_id")
+    product_details = requests.get(global_api_prefix + "api/get-product/?query_str=any&product_id=" + product_id)
+    response = product_details.json()
+    context = {"product_details": response['return_data'][product_id]}
+    print(" i am details")
+    return render(request, 'PriceComparisonApp/product_details.html', context)

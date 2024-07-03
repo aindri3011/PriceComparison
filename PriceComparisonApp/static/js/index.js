@@ -108,9 +108,9 @@
                     <ul>
                         ${items.map(item => `
                             <li>
-                                <a href="#" class="btn btn-default" style="color: white; background: #86008b; margin: 2px;">
-                                    ${item.product} - Rs. ${item.price}
-                                </a>
+                            <button type="button" onclick="location.href='/product_details/?product_id=${item.product_id}'"
+                                   class="btn btn-default" style="color: white; background: #86008b; margin: 2px;">${item.product} - Rs. ${item.price}</button>
+                                
                             </li>
                         `).join('')}
                     </ul>

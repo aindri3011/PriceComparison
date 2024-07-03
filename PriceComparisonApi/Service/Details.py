@@ -136,9 +136,9 @@ class ReadProduct:
 
         for document in self.product_collection.find({}, {'_id': False}):
            if document['shop_name'] not in self.return_data:
-               self.return_data.update({document['shop_name']: [{"name": document['product'], "price": document["price"]}]})
+               self.return_data.update({document['shop_name']: [document]})
            else:
-               self.return_data[document['shop_name']] += [{"name": document['product'], "price": document["price"]}]
+               self.return_data[document['shop_name']] += [document]
 
 
 

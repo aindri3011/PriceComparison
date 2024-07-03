@@ -60,6 +60,7 @@ Add Item To Store
 
   </div>
 
+
 <div class="row" id="product_row">
 {% for key,val in products.items %}
 
@@ -69,7 +70,7 @@ Add Item To Store
   <hr>
       {% for item in val %}
           <ol><b>Item</b>
-      <a href="#" class="btn btn-default" style="color: white;background: #86008b;margin: 2px"> {{ item.name }} - Rs. {{ item.price }}</a>
+      <a href="{% url 'product_details' %}?product_id={{ item.product_id }}" class="btn btn-default" style="color: white;background: #86008b;margin: 2px"> {{ item.product }} - Rs. {{ item.price }}</a>
 </ol>
           {% endfor %}
 
