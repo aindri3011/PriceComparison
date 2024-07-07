@@ -1,6 +1,9 @@
 from django.shortcuts import render
 import requests
 from django.http import JsonResponse
+import pandas as pd
+import matplotlib.pyplot as plt
+
 # Create your views here.
 global_api_prefix="http://localhost:8000/"
 
@@ -64,6 +67,23 @@ def specific_product_details(request):
     product_id = request.GET.get("product_id")
     product_details = requests.get(global_api_prefix + "api/get-product/?query_str=any&product_id=" + product_id)
     response = product_details.json()
-    context = {"product_details": response['return_data'][product_id]}
-    print(" i am details")
+    product_details = response['return_data'][product_id]
+    # if product found ....
+    price_compare_product = requests.get(global_api_prefix + "api/search-product/?search_string=" + product_details['product'])
+    price_details = price_compare_product.json()
+    flat_data = [item for sublist in price_details["return_data"].values() for item in sublist]
+
+    df = pd.DataFrame(flat_data)
+
+    price_comparison = df.groupby('product').agg({
+        'price': ['min', 'max', 'mean'],
+        'shop_name': lambda x: ', '.join(x)
+    }).reset_index()
+    print(price_comparison)
+    # Rename columns for better readability
+    price_comparison.columns = ['Product', 'Min Price', 'Max Price', 'Average Price', 'Stores']
+
+
+    context = {"product_details": product_details, "price_details": price_details["return_data"]}
+
     return render(request, 'PriceComparisonApp/product_details.html', context)
