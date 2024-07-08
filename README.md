@@ -88,10 +88,13 @@ The project uses MongoDB as the database. Ensure you have a MongoDB instance run
 # Usage
 # API Endpoints
 
-Create Shop: POST /api/create-shop/
-Create Product: POST /api/create-product/
-List of all products from database: GET /api/get-product/?query_str=all
-Search Products By Product Name/ Store Name: GET /api/search-product/?search_string=Store1
+-Create Shop: POST /api/create-shop/
+
+-Create Product: POST /api/create-product/
+
+-List of all products from database: GET /api/get-product/?query_str=all
+
+-Search Products By Product Name/ Store Name: GET /api/search-product/?search_string=Store1
 
 # Contributing
 Contributions are welcome! Please fork the repository and submit a pull request.
